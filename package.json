@@ -1,25 +1,31 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
-  "private": true,
-  "dependencies": {
-    "babel": "^6.23.0",
-    "bcryptjs": "^2.4.3",
-    "ejs": "^2.5.9",
-    "eslint": "^4.19.1",
-    "expo": "^27.0.1",
-    "isaac": "0.0.5",
-    "react": "^16.3.1",
-    "react-dom": "^16.3.2",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-27.0.0.tar.gz",
-    "react-native-background-task": "^0.2.1",
-    "react-websocket": "^2.0.0",
-    "webpack": "^4.6.0",
-    "ws": "^5.1.1"
+  "name": "node-js-getting-started",
+  "version": "0.3.0",
+  "description": "A sample Node.js app using Express 4",
+  "engines": {
+    "node": "8.9.1"
   },
+  "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "ejs": "^2.5.6",
+    "express": "^4.15.2"
   },
   "devDependencies": {
-    "webpack-dev-server": "^3.1.4"
-  }
+    "request": "^2.81.0",
+    "tape": "^4.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heroku/node-js-getting-started"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT"
 }
