@@ -1,61 +1,83 @@
-var webpack = require('webpack');
-var WebpackDevServer = require('webpack-dev-server');
-var config = require('./webpack.config');
-const uuidv4 = require('uuid/v4');
-const ws = require('ws');
-var connections = 0;
+var express = require("express");
+var app = express();
+var express = require('express')(),
+    mailer = require('express-mailer');
+var PORT = process.env.PORT || 3000; // default port 8080
+const bodyParser = require("body-parser");
 
-new WebpackDevServer(webpack(config), {
-    publicPath: config.output.publicPath,
-    watchOptions: {
-      aggregateTimeout: 300,
-      poll: 1000,
-      ignored: /node_modules/
+
+app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({extended: true}));
+
+var myVar = setInterval(checkInCheck, 5000);
+
+var activeusers = {
+  'xxjeffxx': {count: 0
+  },
+  'Brianator': {count: 0
+  }
+};
+
+
+mailer.extend(app, {
+  from: 'no-reply@example.com',
+  host: 'smtp.gmail.com', // hostname
+  secureConnection: true, // use SSL
+  port: 465, // port for secure SMTP
+  transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts
+  auth: {
+    user: 'nudge.project.head@gmail.com',
+    pass: 'lighthouse01'
+  }
+});
+
+
+function checkInCheck() {
+  for (var user in activeusers){
+    activeusers[user].count += 1;
+    console.log("test up", user, activeusers[user].count);
+    if (activeusers[user].count > 100){
+      sendEmail('bkavuh@gmail.com');
     }
-  })
+  };
+}
 
-  .listen(4000, '0.0.0.0', function (err, result) {
+function temp1(){
+
+}
+
+function sendEmail(email){
+  app.mailer.send('email', {
+    to: email, // REQUIRED. This can be a comma delimited string just like a normal email to field.
+    subject: 'Test Email', // REQUIRED.
+    otherProperty: 'Other Property' // All additional properties are also passed to the template as local variables.
+  }, function (err) {
     if (err) {
+      // handle error
       console.log(err);
+      console.log('There was an error sending the email');
+      return;
     }
-
-    console.log('Running at http://0.0.0.0:3000');
+    console.log('Email Sent');
   });
-// server.js
+};
 
-const express = require('express');
-const SocketServer = require('ws').Server;
 
-// Set the port to 3001
-const PORT = 3001;
+app.get("/:id", (req, res) => {
+  activeusers[req.params.id].count = 0;
+  res.redirect("http://localhost:8080");
+});
 
-// Create a new express server
-const server = express()
-   // Make the express server serve static assets (html, javascript, css) from the /public folder
-  .use(express.static('public'))
-  .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
+app.get("/login/:id", (req, res) => {
+  activeusers[req.params.id] = {count : 0}
+  res.redirect("http://localhost:8080");
+});
 
-// Create the WebSockets server
-const wss = new SocketServer({ server });
-var clientss = []
-// Set up a callback that will run when a client connects to the server
-// When a client connects they are assigned a socket, represented by
-// the ws parameter in the callback.
+app.get("/logout/:id", (req, res) => {
+  delete activeusers[req.params.id];
+  res.redirect("http://localhost:8080");
+});
 
-setInterval(function() {
-  clients.forEach(function each(client) {
-    if ((Date.now() - client[1]) > 86400000){
-      console.log("WEE");
-    }
-  });
-}, 30 * 60 * 1000); //every 30 minutes
-
-wss.on('connection', (ws) => {
-  sendConnections(connections, 'up');
-  var time = Date.now();
-  clients.push([ws, time]);
-
-  // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => sendConnections(connections, 'down'));
-
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}!`);
 });
