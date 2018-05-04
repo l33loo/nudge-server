@@ -17,7 +17,7 @@
     "ws": "^5.1.1"
   },
   "scripts": {
-    "start": "node nerver.js"
+    "start": "node server.js"
   },
   "devDependencies": {
     "webpack-dev-server": "^3.1.4"
