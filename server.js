@@ -38,7 +38,7 @@ function checkInCheck() {
     activeusers[user].count += 1;
     console.log("test up", user, activeusers[user].count);
     if (activeusers[user].count > 100){
-      sendEmail('bkavuh@gmail.com');
+      sendEmail('nudge.project.head@gmail.com');
     }
   };
 }
