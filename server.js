@@ -30,7 +30,7 @@ app
 // }, 60000);
 // }, 30 * 60 * 1000); //every 30 minutes
 
-app.get('/', (req, res) => {
-  // res.status(200).send(`<html><body>You must enter a valid email and a password to register. <a href="/register">Try again.</a></body></html>\n`);
-  res.render('views/index');
-});
+// app.get('/', (req, res) => {
+//   // res.status(200).send(`<html><body>You must enter a valid email and a password to register. <a href="/register">Try again.</a></body></html>\n`);
+//   res.render('views/index');
+// });
