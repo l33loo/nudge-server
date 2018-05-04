@@ -32,7 +32,8 @@ mailer.extend(app, {
   }
 });
 
-
+// For each user connected to the app, keeps counter.
+// Once counter reaches 10, it sends an automated email to the user's contact.
 function checkInCheck() {
   for (var user in activeusers){
     activeusers[user].count += 1;
