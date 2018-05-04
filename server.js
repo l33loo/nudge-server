@@ -37,7 +37,7 @@ function checkInCheck() {
   for (var user in activeusers){
     activeusers[user].count += 1;
     console.log("test up", user, activeusers[user].count);
-    if (activeusers[user].count > 100){
+    if (activeusers[user].count > 10){
       sendEmail('nudge.project.head@gmail.com');
     }
   };
