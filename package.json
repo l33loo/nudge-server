@@ -16,6 +16,9 @@
     "webpack": "^4.6.0",
     "ws": "^5.1.1"
   },
+  "scripts": {
+    "start": "node nerver.js"
+  },
   "devDependencies": {
     "webpack-dev-server": "^3.1.4"
   }
