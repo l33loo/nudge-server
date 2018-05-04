@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 5000;
 app
   .use(express.static(path.join(__dirname, 'public')))
   .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'html')
+  .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('views/index'))
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
