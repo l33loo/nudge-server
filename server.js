@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const PORT = 3003;
+// const PORT = 3003;
 const app = express()
 
 app
@@ -8,7 +8,7 @@ app
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'jsx')
   .get('/', (req, res) => res.render('pages/index'))
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+  .listen(process.env.PORT || 3000, () => console.log(`Listening on ${ PORT }`));
 
 // Create the WebSockets server
 // const clients = ['carl', (Date.now() - 60000)];
