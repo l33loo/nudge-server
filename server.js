@@ -1,8 +1,9 @@
+
 var express = require("express");
 var app = express();
 var express = require('express')(),
     mailer = require('express-mailer');
-var PORT = process.env.PORT || 3000; // default port 8080
+var PORT = process.env.PORT || 3000; // default port 3000
 const bodyParser = require("body-parser");
 
 
@@ -81,3 +82,4 @@ app.get("/logout/:id", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
+
