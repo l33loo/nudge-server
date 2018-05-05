@@ -1,8 +1,8 @@
 {
-  "user": "vagrant",
-  "password": "vagrant",
+  "user": "development",
+  "password": "development",
   "database": "nudge",
   "hostname": "localhost",
   "port": 5432,
-  "ssl": true
+  "ssl": false
 }

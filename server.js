@@ -9,9 +9,8 @@ var express = require('express')(),
 var PORT = process.env.PORT || 3000; // default port 3000
 const bodyParser = require("body-parser");
 
-const client = clientbuilder(settings);
-
 function clientbuilder (source){
+  console.log(source);
   const client = new pg.Client({
     user     : source.user,
     password : source.password,
@@ -23,41 +22,39 @@ function clientbuilder (source){
   return client;
 }
 
+const client = clientbuilder(settings);
+client.connect((err) => {
+  if (err) {
+    return console.error("Connection Error", err);
+  }
+});
+// client.connect((err) => {
+//   if (err) {
+//     return console.error("Connection Error", err);
+//   }
+//   client.query("SELECT * FROM users", (err, result) => {
+//     if (err) {
+//       return console.error("error running query", err);
+//     }
+//     for (var i = 0; i < result.rows.length; i++){
+//       console.log(" -", (i + 1)+":", result.rows[i].first_name, result.rows[i].last_name);
+//     }
+//      //output: 1
+//     client.end();
+//   });
+// });
+
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 
-var myVar = setInterval(checkInCheck, 5000);
+var myVar = setInterval(checkInCheck, 1000);
 
 var activeusers = {
   'xxjeffxx': {count: 0
   },
-  'Brianator': {count: 0
+  'bkavuh@gmail.com': {count: 8
   }
 };
-
-console.log(client);
-client.connect((err) => {
-  console.log("TETSER")
-  if (err) {
-    return console.error("Connection Error", err);
-  }
-  console.log("TETSER2")
-  client.query("SELECT * FROM users", (err, result) => {
-    if (err) {
-      return console.error("error running query", err);
-    }
-    for (var i = 0; i < result.rows.length; i++){
-      console.log(" -", (i + 1)+":", result.rows[i].first_name, result.rows[i].last_name);
-    }
-     //output: 1
-    client.end();
-  });
-});
-
-
-
-
-
 
 mailer.extend(app, {
   from: 'no-reply@example.com',
@@ -76,14 +73,45 @@ function checkInCheck() {
   for (var user in activeusers){
     activeusers[user].count += 1;
     console.log("test up", user, activeusers[user].count);
-    if (activeusers[user].count > 100){
-      sendEmail('bkavuh@gmail.com');
+    if (activeusers[user].count > 10){
+      const emails = pullEmailList(user);
+      for (var i = 0; i < emails.length; i++){
+        sendEmail(emails[i]);
+      }
     }
   };
 }
 
-function temp1(){
-
+function pullEmailList(user){
+var results = [ ];
+console.log(user)
+  client.query("SELECT id FROM users WHERE email LIKE '%" + user + "%'", (err, result) => {
+    if (err) {
+      return console.error("error running query", err);
+    }
+    console.log(result.rows[0].id)
+    client.query("SELECT list FROM contacts WHERE id IN (" + result.rows[0].id + ")", (err, result) => {
+      if (err) {
+        return console.error("error running query", err);
+      }
+      console.log(result.rows[0].list)
+      const emailList = result.rows[0].list[0];
+      for (var i = 1; i < result.rows[0].list.length; i++){
+        emailList += ', ' + result.rows[0].list[i];
+      }
+      console.log(emailList);
+      client.query("SELECT email FROM users WHERE id IN (" + emailList + ")", (err, result) => {
+        if (err) {
+          return console.error("error running query", err);
+        }
+        console.log(result.rows)
+        for (var i = 0; i < result.rows.length; i++){
+          results.push(result.rows[i].email)
+        }
+      });
+    });
+  });
+  return results;
 }
 
 function sendEmail(email){
