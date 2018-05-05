@@ -1,11 +1,27 @@
 
 var express = require("express");
+const settings = require("./settings");
 var app = express();
+const pg = require('pg')
+var bcrypt = require('bcryptjs');
 var express = require('express')(),
     mailer = require('express-mailer');
 var PORT = process.env.PORT || 3000; // default port 3000
 const bodyParser = require("body-parser");
 
+const client = clientbuilder(settings);
+
+function clientbuilder (source){
+  const client = new pg.Client({
+    user     : source.user,
+    password : source.password,
+    database : source.database,
+    host     : source.hostname,
+    port     : source.port,
+    ssl      : source.ssl
+  });
+  return client;
+}
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -18,6 +34,29 @@ var activeusers = {
   'Brianator': {count: 0
   }
 };
+
+console.log(client);
+client.connect((err) => {
+  console.log("TETSER")
+  if (err) {
+    return console.error("Connection Error", err);
+  }
+  console.log("TETSER2")
+  client.query("SELECT * FROM users", (err, result) => {
+    if (err) {
+      return console.error("error running query", err);
+    }
+    for (var i = 0; i < result.rows.length; i++){
+      console.log(" -", (i + 1)+":", result.rows[i].first_name, result.rows[i].last_name);
+    }
+     //output: 1
+    client.end();
+  });
+});
+
+
+
+
 
 
 mailer.extend(app, {
@@ -70,6 +109,7 @@ app.get("/:id", (req, res) => {
 });
 
 app.get("/login/:id", (req, res) => {
+  if (!activeusers[req.params.id]){}
   activeusers[req.params.id] = {count : 0}
   res.redirect("http://localhost:8080");
 });
