@@ -1,0 +1,26 @@
+CREATE TABLE users (
+  id BIGSERIAL PRIMARY KEY,
+  first_name VARCHAR(50),
+  last_name VARCHAR(50),
+  email VARCHAR(50),
+  password VARCHAR(50),
+  interval INTEGER,
+  notification BOOLEAN
+);
+
+CREATE TABLE contacts (
+  id BIGSERIAL PRIMARY KEY,
+  owner_id INTEGER,
+  contact_id INTEGER,
+  nickname VARCHAR(50),
+  interval INTEGER
+);
+
+INSERT INTO users (first_name, last_name, email, password)
+  VALUES ('test', 'cow', 'moo@moo.moo', 'moo');
+
+INSERT INTO users (email)
+  VALUES ('nudge.project.head@gmail.com');
+
+INSERT INTO contacts (owner_id, contact_id, nickname)
+  VALUES (1, 2, 'dad');
